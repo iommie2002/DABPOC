@@ -1,0 +1,13 @@
+resources:
+  jobs:
+    sample_dab_job:
+      name: sample-dab-job
+
+      tasks:
+        - task_key: run_sample_notebook
+          description: "Run a simple Databricks notebook"
+
+          notebook_task:
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/DABPOC/POC-DAB/src/notebooks/hello job
+
+        

@@ -1,0 +1,47 @@
+name: Databricks CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - dev
+jobs:
+  deploy:
+    name: "Deploy to Databricks"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Databricks CLI
+        uses: databricks/setup-cli@main
+
+      # 1. VALIDATION (CI)
+      - name: Validate Bundle
+        run: databricks bundle validate
+        working-directory: ./POC-DAB/  # <--- ADD THIS
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
+      # 2. DEPLOY TO DEV (CD)
+      - name: Deploy to Dev
+        
+        run: databricks bundle deploy -t dev
+        working-directory: ./POC-DAB/  # <--- ADD THIS
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
+      # 3. DEPLOY TO PROD (CD)
+      - name: Deploy to Prod
+        
+        run: databricks bundle deploy -t prod
+        working-directory: ./POC-DAB/  # <--- ADD THIS
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
